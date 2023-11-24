@@ -5,16 +5,30 @@ import com.parkit.parkingsystem.model.Ticket;
 
 public class FareCalculatorService {
 
+	// Réduction de 5% sur le prix
+	public void calculateFare(Ticket ticket, boolean discount) {
+		calculateFare(ticket);
+		// Réduction de 5% parce que utilisateur régulier (type double)
+		if(discount == true) {
+			ticket.setPrice(ticket.getPrice()*0.95);
+		}
+	}
+	
+	
     public void calculateFare(Ticket ticket){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
 
-        int inHour = ticket.getInTime().getHours();
-        int outHour = ticket.getOutTime().getHours();
+        double inHour = ticket.getInTime().getTime();
+        double outHour = ticket.getOutTime().getTime();
 
         //TODO: Some tests are failing here. Need to check if this logic is correct
-        int duration = outHour - inHour;
+        double duration = (outHour - inHour) / (60 * 60 * 1000);// Divisé par 1 min * 1h* millisecondes
+        
+        if (duration < 0.5) {
+        	duration = 0;
+        }//Tps de stationnement inférieur à 30 minutes
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {

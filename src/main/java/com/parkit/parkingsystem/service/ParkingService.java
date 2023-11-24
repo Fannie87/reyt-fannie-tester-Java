@@ -48,6 +48,7 @@ public class ParkingService {
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
+                System.out.println("Bienvenue chez nous!");
             }
         }catch(Exception e){
             logger.error("Unable to process incoming vehicle",e);
@@ -103,7 +104,12 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket);
+            int nbTicket = ticketDAO.getNbTicket(ticket);
+            
+            // Si ticket >= 1, alors discount est appliqué (-5%)
+            boolean discount = nbTicket >= 1;
+            
+			fareCalculatorService.calculateFare(ticket, discount);
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);

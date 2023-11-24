@@ -22,6 +22,7 @@ public class ParkingSpot {
     }
 
     public ParkingType getParkingType() {
+    	
         return parkingType;
     }
 
