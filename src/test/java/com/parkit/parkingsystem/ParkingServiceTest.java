@@ -41,7 +41,6 @@ public class ParkingServiceTest {
 	@BeforeEach
 	private void setUpPerTest() {
 		try {
-//			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
 //			when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
@@ -53,12 +52,13 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void processExitingVehicleTest() {
+	public void processExitingVehicleTest() throws Exception {
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 		Ticket ticket = new Ticket();
 		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
 		ticket.setParkingSpot(parkingSpot);
 		ticket.setVehicleRegNumber("ABCDEF");
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 		when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
 		when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 		when(ticketDAO.getNbTicket(ticket)).thenReturn(12);
@@ -117,5 +117,17 @@ public class ParkingServiceTest {
 		ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 		
 		assertEquals(null, parkingSpot);
+		//possibilité d'utiliser assertNull(param1, param2);
 	}
+	
+	@Test
+	void testGetNextParkingNumberIfAvailableParkingNumberWrongArgum() {
+		
+		when(inputReaderUtil.readSelection()).thenReturn(3);
+		
+		ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+		
+		assertEquals(null, parkingSpot);
+	}
+	
 }
