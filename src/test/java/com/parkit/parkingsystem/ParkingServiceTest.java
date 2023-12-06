@@ -75,7 +75,7 @@ public class ParkingServiceTest {
     	
     	parkingService.processIncomingVehicle();
 
-		verify(ticketDAO, Mockito.times(2)).saveTicket(any(Ticket.class));
+		verify(ticketDAO, Mockito.times(1)).saveTicket(any(Ticket.class));
 	}
 
 	// Test 2: Enlève ligne 43s
