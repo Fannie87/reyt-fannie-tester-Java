@@ -6,7 +6,7 @@ import com.parkit.parkingsystem.model.Ticket;
 public class FareCalculatorService {
 
 	// Réduction de 5% sur le prix
-	public void calculateFare(Ticket ticket, boolean discount) {
+	public void calculateFareWithDiscount(Ticket ticket, boolean discount) {
 		calculateFare(ticket);
 		// Réduction de 5% parce que utilisateur régulier (type double)
 		if(discount == true) {

@@ -110,7 +110,7 @@ public class ParkingService {
             boolean discount = nbTicket >= 1;
             
 //            Calcul du prix ticket
-			fareCalculatorService.calculateFare(ticket, discount);
+			fareCalculatorService.calculateFareWithDiscount(ticket, discount);
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
