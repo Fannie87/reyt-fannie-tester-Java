@@ -109,6 +109,7 @@ public class ParkingService {
             // Si ticket >= 1, alors discount est appliqué (-5%)
             boolean discount = nbTicket >= 1;
             
+//            Calcul du prix ticket
 			fareCalculatorService.calculateFare(ticket, discount);
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
