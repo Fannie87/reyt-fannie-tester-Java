@@ -7,7 +7,7 @@ public class FareCalculatorService {
 
 	// Réduction de 5% sur le prix
 	public void calculateFareWithDiscount(Ticket ticket, boolean discount) {
-		calculateFare(ticket);
+		this.calculateFare(ticket);
 		// Réduction de 5% parce que utilisateur régulier (type double)
 		if(discount == true) {
 			ticket.setPrice(ticket.getPrice()*0.95);
