@@ -10,14 +10,12 @@ import static org.mockito.Mockito.when;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -52,7 +50,7 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void processExitingVehicleTest() throws Exception {
+	void processExitingVehicleTest() throws Exception {
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 		Ticket ticket = new Ticket();
 		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
@@ -115,7 +113,6 @@ public class ParkingServiceTest {
 		when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(0);
 		
 		ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-		
 		assertEquals(null, parkingSpot);
 		//possibilité d'utiliser assertNull(param1, param2);
 	}

@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
 
-	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+	private static final DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	private static ParkingSpotDAO parkingSpotDAO;
 	private static TicketDAO ticketDAO;
 	private static DataBasePrepareService dataBasePrepareService;
@@ -40,7 +39,7 @@ public class ParkingDataBaseIT {
 	private static InputReaderUtil inputReaderUtil;
 
 	@BeforeAll
-	private static void setUp() throws Exception {
+	public static void setUp() throws Exception {
 		parkingSpotDAO = new ParkingSpotDAO();
 		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
 		ticketDAO = new TicketDAO();
@@ -49,32 +48,27 @@ public class ParkingDataBaseIT {
 	}
 
 	@BeforeEach
-    private void setUpPerTest() throws Exception {
+    public void setUpPerTest() throws Exception {
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         dataBasePrepareService.clearDataBaseEntries();
 	}
 
-	@AfterAll
-	private static void tearDown() {
-
-	}
-
 	@Test
-    public void testParkingACar(){
+    void testParkingACar(){
 		when(inputReaderUtil.readSelection()).thenReturn(1);
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         
         
-        //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
+        // check that a ticket is actualy saved in DB and Parking table is updated with availability
         Ticket ticket=ticketDAO.getTicket("ABCDEF");
         assertEquals(false,ticket.getParkingSpot().isAvailable());
     }
 
 	@Test
-	public void testParkingLotExit() throws ParseException {
+	void testParkingLotExit() throws ParseException {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-		
+
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
 		Ticket ticket = new Ticket();
 		ticket.setId(1);
@@ -86,7 +80,7 @@ public class ParkingDataBaseIT {
 		ticketDAO.saveTicket(ticket);
 		parkingService.processExitingVehicle();
 
-		// TODO: check that the fare generated and out time are populated correctly in
+		// check that the fare generated and out time are populated correctly in
 		// the database
 		Ticket ticket1 = ticketDAO.getTicket("ABCDEF");
 		assertNotNull(ticket1.getOutTime());
@@ -94,7 +88,7 @@ public class ParkingDataBaseIT {
 	}
 
 	@Test
-	public void testParkingLotExitRecurringUser() throws ParseException {
+	void testParkingLotExitRecurringUser() throws ParseException {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
@@ -111,7 +105,7 @@ public class ParkingDataBaseIT {
 
 		Ticket ticket1 = ticketDAO.getTicket("ABCDEF");
 
-		// TODO : calcul prix avec discount
+		// calcul prix avec discount
 		double expectedFare = (ticket1.getOutTime().getTime() - ticket1.getInTime().getTime()) * Fare.CAR_RATE_PER_HOUR
 				* 0.95 / (60 * 60 * 1000);
 		DecimalFormat decimalFormat = new DecimalFormat("#.##");
